@@ -1,37 +1,42 @@
+const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config();
+const productosRouter = require("./routes/productos.routes");
+const ticketsRouter = require("./routes/tickets.routes")
+const usuariosRouter = require("./routes/usuarios.routes")
+require('dotenv').config()
 
-const app = require("./app");
+// configuración inicial.
+const app = express();
+const mongoUrl = process.env.MONGODB_URL;
+const port = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use("/api/productos", productosRouter);
+app.use("/api/tickets", ticketsRouter)
+app.use("/api/usuarios", usuariosRouter)
+
+//swagger & logger.
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 const logger = require("./config/logger");
 
-async function startServer() {
-    const mongoUrl = process.env.MONGODB_URL_LOCAL;
-    const port = Number(process.env.PORT || 3000);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-    if (!mongoUrl) {
-        throw new Error("Falta configurar MONGODB_URL_LOCAL en el archivo .env");
-    }
-
-    if (!Number.isInteger(port) || port < 0 || port > 65535) {
-        throw new Error("PORT debe ser un número entero entre 0 y 65535");
-    }
-
-    await mongoose.connect(mongoUrl);
-    logger.info("Conexión a MongoDB establecida");
-
-    await new Promise((resolve, reject) => {
-        const server = app.listen(port, () => resolve(server));
-        server.once("error", reject);
-    });
-
-    logger.info(`Servidor escuchando en el puerto ${port}`);
+// verificaciones preconexión.
+if (!mongoUrl) {
+    logger.error("Falta la variable MONGODB_URL en el archivo .env");
+    process.exit(1);
 }
 
-if (require.main === module) {
-    startServer().catch((error) => {
-        logger.error("No se pudo iniciar la aplicación:", error);
-        process.exitCode = 1;
-    });
-}
+// conexión a la BBDD.
+mongoose
+    .connect(mongoUrl).then(() => {
+        logger.info("Conexión con MongoDB establecida")
 
-module.exports = { startServer };
+        app.listen(port, () => {
+            logger.info(`App escuchando en puerto => ${port}`)
+        })
+    })
+    .catch((error) => {
+        logger.error(`Error al conectar con la base de datos: ${error}`);
+    })
