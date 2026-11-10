@@ -93,7 +93,6 @@ router.get("/verTodos",
  *         description: No se pudo crear el producto
  */
 router.post("/crearProducto",
-    verificarUsuarioPorId,
     nuevoProducto)
 
 /**
