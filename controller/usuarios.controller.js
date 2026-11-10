@@ -50,6 +50,11 @@ const login = async (req, res) => {
             return res.status(401).send("usuario o contraseña incorrectos")
         }
 
+        if (!process.env.JWT_SECRET) {
+            logger.error("Falta configurar JWT_SECRET")
+            return res.status(500).send("Error de configuración del servidor")
+        }
+
         // generación de token de firma para el usuario.
         const token = jwt.sign({
             id: usuario._id,

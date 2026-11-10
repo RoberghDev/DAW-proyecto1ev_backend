@@ -7,6 +7,8 @@ const {
 const {
     verificarUsuarioPorId
 } = require("../middleware/verificaciones.middleware")
+const { verificarRol } = require("../middleware/rol.middleware")
+const { verificarToken } = require("../middleware/autenticacion.middleware")
 
 const router = express.Router()
 
@@ -49,7 +51,6 @@ const router = express.Router()
  *         description: No se pudieron obtener los productos
  */
 router.get("/verTodos",
-    verificarUsuarioPorId,
     listaProductos)
 
 /**
@@ -93,6 +94,8 @@ router.get("/verTodos",
  *         description: No se pudo crear el producto
  */
 router.post("/crearProducto",
+    verificarToken,
+    verificarRol("MOD", "ADMON"),
     nuevoProducto)
 
 /**
@@ -123,6 +126,7 @@ router.post("/crearProducto",
  *       500:
  *         description: No se pudo borrar el producto
  */
-router.delete("/eliminaUno/:idProducto", eliminarProducto)
+router.delete("/eliminaUno/:idProducto", 
+    eliminarProducto)
 
 module.exports = router
