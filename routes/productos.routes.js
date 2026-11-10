@@ -4,6 +4,9 @@ const {
     nuevoProducto,
     eliminarProducto
 } = require("../controller/productos.controller")
+const {
+    verificarUsuarioPorId
+} = require("../middleware/verificaciones.middleware")
 
 const router = express.Router()
 
@@ -45,7 +48,9 @@ const router = express.Router()
  *       404:
  *         description: No se pudieron obtener los productos
  */
-router.get("/verTodos", listaProductos)
+router.get("/verTodos",
+    verificarUsuarioPorId,
+    listaProductos)
 
 /**
  * @openapi
@@ -87,7 +92,9 @@ router.get("/verTodos", listaProductos)
  *       500:
  *         description: No se pudo crear el producto
  */
-router.post("/crearProducto", nuevoProducto)
+router.post("/crearProducto",
+    verificarUsuarioPorId,
+    nuevoProducto)
 
 /**
  * @openapi
