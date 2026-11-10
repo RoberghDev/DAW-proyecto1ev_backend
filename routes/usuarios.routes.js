@@ -1,5 +1,6 @@
 const express = require("express")
 const { nuevoUsuario, login } = require("../controller/usuarios.controller")
+const { verificarToken } = require("../middleware/autenticacion.middleware")
 
 const router = express.Router()
 
@@ -11,6 +12,8 @@ const router = express.Router()
  *       - Usuarios
  *     summary: Registra un usuario
  *     description: La contraseña se cifra antes de guardarse. Si no se indica rol, se asigna USER.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -48,10 +51,12 @@ const router = express.Router()
  *             schema:
  *               type: string
  *             example: usuario creado con éxito
+ *       401:
+ *         description: Falta un token Bearer válido
  *       500:
  *         description: No se pudo crear el usuario
  */
-router.post("/registro", nuevoUsuario)
+router.post("/registro", verificarToken, nuevoUsuario)
 
 /**
  * @openapi

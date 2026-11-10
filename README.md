@@ -15,7 +15,7 @@ npm install
 cp .env.example .env
 ```
 
-Edita `.env` y configura `MONGODB_URL_LOCAL` con la URI de tu instancia de MongoDB. No subas ese archivo al repositorio.
+Edita `.env` y configura `MONGODB_URL_LOCAL` con la URI de tu instancia de MongoDB y `JWT_SECRET` con una clave aleatoria larga para firmar los tokens. No uses el valor de ejemplo en producción ni subas ese archivo al repositorio.
 
 ## Ejecución
 
