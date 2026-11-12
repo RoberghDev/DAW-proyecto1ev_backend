@@ -41,6 +41,7 @@ La aplicación espera a que MongoDB conecte antes de abrir el puerto. El puerto 
 
 ## Estructura del árbol de directorios
 
+```text
 DAW-proyecto1ev_backend/
 ├── README.md
 ├── app.js
