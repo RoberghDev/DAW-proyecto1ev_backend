@@ -7,7 +7,7 @@ require('dotenv').config()
 
 // configuración inicial.
 const app = express();
-const mongoUrl = process.env.MONGODB_URL_LOCAL;
+const mongoUrl = process.env.MONGODB_URL;
 const port = process.env.PORT || 3000;
 
 app.use(express.json());

@@ -1,10 +1,12 @@
 const Usuario = require("../model/usuarios.model")
+const Producto = require("../model/productos.model")
+const Tiket = require("../model/tickets.model")
 const mongoose = require("mongoose");
 const logger = require("../config/logger");
 
 // VERIFICA QUE EL USUARIO ES UN USUARIO REAL.
 const verificarUsuarioPorId = async (req, res, next) => {
-    const idUsuario = req.params.idUsuario
+    const idUsuario = req.body?.idUsuario
 
     if (!mongoose.isValidObjectId(idUsuario)) {
         logger.error("verificación engativa del usuario: ID inválido")
@@ -29,15 +31,15 @@ const verificarUsuarioPorId = async (req, res, next) => {
 
 // VERIFICA QUE LOS PRODUCTOS SON PRODUCTOS REALES.
 const verificarProductosPorId = async (req, res, next) => {
-    const idProducto = req.params.idProducto
+    const productoId = req.params.idProducto || req.body.idProducto
 
-    if (!mongoose.isValidObjectId(idProducto)) {
+    if (!mongoose.isValidObjectId(productoId)) {
         logger.error("verificación negativa del producto: ID inválido")
         return res.status(400).send("verificación negativa del producto: ID inválido")
     }
 
     try {
-        const producto = await Producto.findById(idProducto)
+        const producto = await Producto.findById(productoId)
 
         if (!producto) {
             logger.error("verificación negativa del producto: Producto no encontrado")
@@ -54,7 +56,7 @@ const verificarProductosPorId = async (req, res, next) => {
 
 // VERIFICAR QUE LOS TIKETS SON REALES.
 const verificarTicketsPorId = async (req, res, next) => {
-    const idTicket = req.params.idTicket
+    const idTicket = req.params.idTicket || req.body?.idTicket
 
     if(!mongoose.isValidObjectId(idTicket)){
         logger.error("verificación negativa del ticket: ID inválido")
@@ -68,7 +70,7 @@ const verificarTicketsPorId = async (req, res, next) => {
             return res.status(404).send("verificación negativa del ticket: ID no encontrado")
         }
 
-        logger.info("verificación positiva del usuario")
+        logger.info("verificación positiva del ticket")
         return next()
 
     } catch (error) {

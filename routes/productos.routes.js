@@ -4,9 +4,7 @@ const {
     nuevoProducto,
     eliminarProducto
 } = require("../controller/productos.controller")
-const {
-    verificarUsuarioPorId
-} = require("../middleware/verificaciones.middleware")
+const { verificarProductosPorId, verificarUsuarioPorId } = require("../middleware/verificaciones.middleware")
 const { verificarRol } = require("../middleware/rol.middleware")
 const { verificarToken } = require("../middleware/autenticacion.middleware")
 
@@ -126,7 +124,10 @@ router.post("/crearProducto",
  *       500:
  *         description: No se pudo borrar el producto
  */
-router.delete("/eliminaUno/:idProducto", 
+router.delete("/eliminarProducto/:idProducto",
+    verificarProductosPorId,
+    verificarToken,
+    verificarRol("MOD", "ADMON"),
     eliminarProducto)
 
 module.exports = router

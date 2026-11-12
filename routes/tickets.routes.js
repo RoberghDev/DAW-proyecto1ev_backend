@@ -4,6 +4,13 @@ const {
     crearNuevoTicket,
     eliminarTikets
 } = require("../controller/tickets.controller")
+const {
+    verificarUsuarioPorId,
+    verificarProductosPorId,
+    verificarTicketsPorId
+} = require("../middleware/verificaciones.middleware")
+const { verificarToken } = require("../middleware/autenticacion.middleware")
+const { verificarRol } = require("../middleware/rol.middleware")
 
 const router = express.Router()
 
@@ -87,7 +94,10 @@ router.get("/verTodos", verTodos)
  *       500:
  *         description: No se pudo crear el ticket
  */
-router.post("/crearTicket", crearNuevoTicket)
+router.post("/crearTicket",
+    verificarUsuarioPorId,
+    verificarProductosPorId,
+    crearNuevoTicket)
 
 /**
  * @openapi
@@ -117,6 +127,10 @@ router.post("/crearTicket", crearNuevoTicket)
  *       500:
  *         description: No se pudo eliminar el ticket
  */
-router.delete("/eliminaUno/:idTicket", eliminarTikets)
+router.delete("/eliminaUno/:idTicket",
+    verificarToken,
+    verificarRol("MOD", "ADMON"),
+    verificarTicketsPorId,
+    eliminarTikets)
 
 module.exports = router
