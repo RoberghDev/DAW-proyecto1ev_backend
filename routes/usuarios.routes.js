@@ -52,7 +52,7 @@ const router = express.Router()
  *         description: No se pudo crear el usuario
  */
 router.post("/registro", nuevoUsuario)
-
+    
 /**
  * @openapi
  * /api/usuarios/login:

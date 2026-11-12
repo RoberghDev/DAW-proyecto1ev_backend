@@ -52,7 +52,10 @@ const router = express.Router()
  *       500:
  *         description: No se pudieron obtener los tickets
  */
-router.get("/verTodos", verTodos)
+router.get("/verTodos",
+    verificarToken,
+    verificarRol("ADMON"),
+    verTodos)
 
 /**
  * @openapi

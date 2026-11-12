@@ -90,3 +90,20 @@ Este árbol ayuda a mantener una estructura modular y ordenada para el backend.
 - `GET /api/health`: comprueba que el servidor responde.
 - `/api-docs`: documentación OpenAPI.
 - `/api/usuarios`, `/api/productos`, `/api/tickets`: prefijos reservados para las rutas que se implementarán.
+
+### Roles y permisos
+
+# ROLES Y PERMISOS
+
+A continuación se detalla la matriz de permisos según el controlador, la acción a realizar y el rol del usuario:
+
+| Controladores | Acciones | USER | MOD | ADMIN |
+| :--- | :--- | :---: | :---: | :---: |
+| **PRODUCTOS** | Listar productos | SI | SI | SI |
+| | Crear productos | NO | SI | SI |
+| | Eliminar productos | NO | SI | SI |
+| **TICKETS** | Ver todos los tickets | NO | NO | SI |
+| | Crear ticket | SI | SI | SI |
+| | Eliminar un ticket | NO | SI | SI |
+| **USUARIOS** | Registrar nuevo usuario | SI | SI | SI |
+| | Login | SI | SI | SI |
