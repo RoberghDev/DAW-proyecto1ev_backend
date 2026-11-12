@@ -93,7 +93,7 @@ router.get("/verTodos",
  */
 router.post("/crearProducto",
     verificarToken,
-    verificarRol("MOD", "ADMON"),
+    verificarRol("MOD", "ADMIN"),
     nuevoProducto)
 
 /**
@@ -127,7 +127,7 @@ router.post("/crearProducto",
 router.delete("/eliminarProducto/:idProducto",
     verificarProductosPorId,
     verificarToken,
-    verificarRol("MOD", "ADMON"),
+    verificarRol("MOD", "ADMIN"),
     eliminarProducto)
 
 module.exports = router

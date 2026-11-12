@@ -38,7 +38,7 @@ const router = express.Router()
  *                 example: "600123456"
  *               rol:
  *                 type: string
- *                 enum: [USER, MOD, ADMON]
+ *                 enum: [USER, MOD, ADMIN]
  *                 default: USER
  *     responses:
  *       201:

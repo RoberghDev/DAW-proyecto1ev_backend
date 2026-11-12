@@ -54,7 +54,7 @@ const router = express.Router()
  */
 router.get("/verTodos",
     verificarToken,
-    verificarRol("ADMON"),
+    verificarRol("ADMIN"),
     verTodos)
 
 /**
@@ -132,7 +132,7 @@ router.post("/crearTicket",
  */
 router.delete("/eliminaUno/:idTicket",
     verificarToken,
-    verificarRol("MOD", "ADMON"),
+    verificarRol("MOD", "ADMIN"),
     verificarTicketsPorId,
     eliminarTikets)
 

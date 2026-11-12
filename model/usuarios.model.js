@@ -11,7 +11,7 @@ const usuarioSchema = new Schema(
             type: String,
             required: true,
             trim: true,
-            enum: ["USER", "MOD", "ADMON"], // TODO: definir los tipos de roles
+            enum: ["USER", "MOD", "ADMIN"], // TODO: definir los tipos de roles
             default: "USER"
         },
         password: {
