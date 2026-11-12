@@ -22,6 +22,11 @@ const logger = require("./config/logger");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
+// TODO: preguntar que es y si es buena idea tenerlo
+// app.get("/api/health", (_req, res) => {
+//     res.status(200).json({ status: "ok" });
+// });
+
 // verificaciones preconexión.
 if (!mongoUrl) {
     logger.error("Falta la variable MONGODB_URL en el archivo .env");

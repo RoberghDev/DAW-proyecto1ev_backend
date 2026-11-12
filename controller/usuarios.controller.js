@@ -19,11 +19,11 @@ const nuevoUsuario = async (req, res) => {
         )
 
         await nuevoUsuario.save()
-        logger.info("usuario creado con éxito")
+        logger.info("Usuarios Controller -> usuario creado con éxito")
         return res.status(201).send("usuario creado con éxito")
 
     } catch (error) {
-        logger.error(`Error al crear el usuario: ERROR -> ${error}`);
+        logger.error(`Usuarios Controller -> Error al crear el usuario: ERROR -> ${error}`);
         return res.status(500).send(`error interno: ERROR -> ${error}`)
     }
 
@@ -37,7 +37,7 @@ const login = async (req, res) => {
         const { password } = req.body;
 
         if (!nombreUsuario || !password) {
-            logger.error("no se han introducido nombre de usuario y/o contraseña")
+            logger.error("Usuarios Controller -> no se han introducido nombre de usuario y/o contraseña")
             return res.status(400).send("nombre de usuario y contraseña son obligatorios")
         }
 
@@ -46,12 +46,12 @@ const login = async (req, res) => {
         const esContrasenaCorrecta = usuario ? await bcrypt.compare(password, usuario.password) : false;
 
         if (!usuario || !esContrasenaCorrecta) {
-            logger.error("Intento de inicio de sesión con credenciales incorrectas");
+            logger.error("Usuarios Controller -> Intento de inicio de sesión con credenciales incorrectas");
             return res.status(401).send("usuario o contraseña incorrectos")
         }
 
         if (!process.env.JWT_SECRET) {
-            logger.error("Falta configurar JWT_SECRET")
+            logger.error("Usuarios Controller -> Falta configurar JWT_SECRET")
             return res.status(500).send("Error de configuración del servidor")
         }
 
@@ -67,14 +67,14 @@ const login = async (req, res) => {
             // }
             )
 
-        logger.info("Inicio de sesión correcto");
+        logger.info("Usuarios Controller -> Inicio de sesión correcto");
         return res.status(200).json({
             mensaje: "login correcto",
             token: token
         })
 
     } catch (error) {
-        logger.error(`Error al iniciar sesión: ${error}`);
+        logger.error(`Usuarios Controller -> Error al iniciar sesión: ${error}`);
         res.status(500).send("internal server error")
     }
 }

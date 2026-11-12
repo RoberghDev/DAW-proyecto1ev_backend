@@ -4,16 +4,16 @@ const logger = require("../config/logger");
 // TODO: ponerse de acuerdo entre los roles del usuario
 const verificarRol = (...rolesPermitidos) => (req, res, next) => {
     if (!req.usuario) {
-        logger.error("verificación negativa: no hay usuario autenticado")
+        logger.error("Verificación de rol -> verificación negativa: no hay usuario autenticado")
         return res.status(401).send("se debe iniciar sesión")
     }
 
     if (!rolesPermitidos.includes(req.usuario.rol)) {
-        logger.info("El usuario no tiene permiso para esta acción")
+        logger.info("Verificación de rol -> El usuario no tiene permiso para esta acción")
         return res.status(403).send("usuarios sin suficientes permisos")
     }
 
-    logger.info("Usuario verificado correctamente")
+    logger.info("Verificación de rol -> Usuario verificado correctamente")
     return next()
 }
 

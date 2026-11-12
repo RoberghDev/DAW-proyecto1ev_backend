@@ -5,11 +5,11 @@ const logger = require("../config/logger");
 const verTodos = async (req, res) => {
     try {
         const resultado = await Tickets.find()
-        logger.info(`se han listado ${resultado.length} tickets`)
+        logger.info(`Ticket Controller -> se han listado ${resultado.length} tickets`)
 
         return res.status(200).send(resultado)
     } catch (error) {
-        logger.error("Error al listar los tickets:", error)
+        logger.error("Ticket Controller -> Error al listar los tickets:", error)
         return res.status(500).json({ error: "No se pudieron obtener los tickets" })
     }
 }
@@ -26,10 +26,10 @@ const crearNuevoTicket = async (req, res) => {
         )
 
         await nuevoTicket.save()
-        logger.info("nuevo ticket creado")
+        logger.info("Ticket Controller -> nuevo ticket creado")
         return res.status(201).send("nuevo ticket creado")
     } catch (error) {
-        logger.error("Error al crear el ticket:", error)
+        logger.error("Ticket Controller -> Error al crear el ticket:", error)
         return res.status(500).json({ error: "No se crear el ticket" })
     }
 }
@@ -39,15 +39,15 @@ const eliminarTikets = async (req, res) => {
         const resultado = await Tickets.findByIdAndDelete(req.params.idTicket)
 
         if(!resultado){
-            logger.error("no se ha encontrado el ticket")
+            logger.error("Ticket Controller -> no se ha encontrado el ticket")
             return res.status(404).send("no se ha encontrado el ticket")
         } else {
-            logger.info("ticket eliminado con éxito")
+            logger.info("Ticket Controller -> ticket eliminado con éxito")
             return res.status(200).send("ticket eliminado con éxito")
         }
 
     } catch (error) {
-        logger.error("Error al eliminar el ticket", error)
+        logger.error("Ticket Controller -> Error al eliminar el ticket", error)
         return res.status(500).json({ error: "No se eliminar el ticket" })
     }
 }

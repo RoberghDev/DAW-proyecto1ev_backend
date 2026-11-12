@@ -6,11 +6,12 @@ const verificarToken = (req, res, next) => {
     const [esquema, token] = authHeader ? authHeader.split(" ") : []
 
     if (esquema !== "Bearer" || !token) {
+        logger.error("Verificación Token -> se requiere un token Bearer válido")
         return res.status(401).send("se requiere un token Bearer válido")
     }
 
     if (!process.env.JWT_SECRET) {
-        logger.error("Falta configurar JWT_SECRET")
+        logger.error("Verificación Token -> Falta configurar JWT_SECRET")
         return res.status(500).send("Error de configuración del servidor")
     }
 
@@ -18,13 +19,14 @@ const verificarToken = (req, res, next) => {
         const usuario = jwt.verify(token, process.env.JWT_SECRET)
 
         if (typeof usuario === "string" || !usuario.rol) {
+            logger.error("Verificación Token -> token inválido")
             return res.status(401).send("token inválido")
         }
 
         req.usuario = usuario
         return next()
     } catch (error) {
-        logger.info(`Token de autenticación inválido: ${error.message}`)
+        logger.info(`Verificación Token -> Token de autenticación inválido: ${error.message}`)
         return res.status(401).send("token inválido o expirado")
     }
 }
