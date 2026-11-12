@@ -15,7 +15,7 @@ npm install
 cp .env.example .env
 ```
 
-Edita `.env` y configura `MONGODB_URL_LOCAL` con la URI de tu instancia de MongoDB y `JWT_SECRET` con una clave aleatoria larga para firmar los tokens. No uses el valor de ejemplo en producción ni subas ese archivo al repositorio.
+Edita `.env` y configura `MONGODB_URL_LOCAL` y/o `MONGODB_URL`con la URL de tu instancia de MongoDB y `JWT_SECRET` con una clave aleatoria larga para firmar los tokens. No uses el valor de ejemplo en producción ni subas ese archivo al repositorio.
 
 ## Ejecución
 
@@ -41,8 +41,7 @@ La aplicación espera a que MongoDB conecte antes de abrir el puerto. El puerto 
 
 ## Estructura del árbol de directorios
 
-```text
-05_proyectoFinal/
+DAW-proyecto1ev_backend/
 ├── README.md
 ├── app.js
 ├── index.js
