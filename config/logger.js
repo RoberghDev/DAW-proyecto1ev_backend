@@ -1,4 +1,12 @@
 module.exports = {
-    info: (...messages) => console.info("[INFO]", ...messages),
-    error: (...messages) => console.error("[ERROR]", ...messages)
+    info: (...messages) => {
+        if (process.env.NODE_ENV !== "test") {
+            console.info("[INFO]", ...messages);
+        }
+    },
+    error: (...messages) => {
+        if (process.env.NODE_ENV !== "test") {
+            console.error("[ERROR]", ...messages);
+        }
+    }
 };

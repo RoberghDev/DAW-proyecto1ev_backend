@@ -44,10 +44,13 @@ if (!mongoUrl) {
 // conexión a la BBDD.
 mongoose
     .connect(mongoUrl).then(() => {
+        logger.info("ADVERTENCIA: este es un proyecto en desarrollo y susceptible de errores.")
+        logger.info("-------------------------------------")
         logger.info("Conexión con MongoDB establecida")
 
         app.listen(port, () => {
             logger.info(`App escuchando en puerto => ${port}`)
+            logger.info(`URL -> http://localhost:${port}/api`)
         })
     })
     .catch((error) => {
