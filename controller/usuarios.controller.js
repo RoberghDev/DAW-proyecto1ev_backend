@@ -33,16 +33,16 @@ const nuevoUsuario = async (req, res) => {
 const login = async (req, res) => {
     try {
         // preparación y comprobación de errores.
-        const nombreUsuario = req.body.nombreUsuario || req.body.username;
-        const { password } = req.body;
+        const email = req.body.email;
+        const password = req.body.password;
 
-        if (!nombreUsuario || !password) {
+        if (!email || !password) {
             logger.error("Usuarios Controller -> no se han introducido nombre de usuario y/o contraseña")
             return res.status(400).send("nombre de usuario y contraseña son obligatorios")
         }
 
         // accicón de login.
-        const usuario = await Usuario.findOne({ nombreUsuario }).select("+password")
+        const usuario = await Usuario.findOne({ email }).select("+password")
         const esContrasenaCorrecta = usuario ? await bcrypt.compare(password, usuario.password) : false;
 
         if (!usuario || !esContrasenaCorrecta) {
@@ -58,13 +58,10 @@ const login = async (req, res) => {
         // generación de token de firma para el usuario.
         const token = jwt.sign({
             id: usuario._id,
-            nombreUsuario: usuario.nombreUsuario,
+            email: usuario.email,
             rol: usuario.rol
         },
-            process.env.JWT_SECRET,
-            // { TODO: llegar a un acuerdo para la expiración del usuario.
-            //     expiresIn: "2h"
-            // }
+            process.env.JWT_SECRET
             )
 
         logger.info("Usuarios Controller -> Inicio de sesión correcto");

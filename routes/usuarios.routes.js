@@ -60,22 +60,21 @@ router.post("/registro", nuevoUsuario)
  *     tags:
  *       - Usuarios
  *     summary: Inicia sesión y devuelve un JWT
- *     description: Para el nombre de usuario se acepta nombreUsuario o username.
+ *     description: El campo username es obligatorio; nombreUsuario no se utiliza en el login. El JWT no tiene una expiración configurada.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
+ *           examples:
+ *             conUsername:
+ *               summary: Login con username
+ *               value:
+ *                 username: maria.lopez
+ *                 password: Reloj123!
  *           schema:
  *             type: object
- *             required:
- *               - password
- *             anyOf:
- *               - required: [nombreUsuario]
- *               - required: [username]
+ *             required: [username, password]
  *             properties:
- *               nombreUsuario:
- *                 type: string
- *                 example: maria.lopez
  *               username:
  *                 type: string
  *                 example: maria.lopez
@@ -97,13 +96,32 @@ router.post("/registro", nuevoUsuario)
  *                   example: login correcto
  *                 token:
  *                   type: string
- *                   description: JWT firmado
+ *                   description: JWT firmado sin expiración configurada.
  *       400:
  *         description: Faltan el nombre de usuario o la contraseña
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *             example: nombre de usuario y contraseña son obligatorios
  *       401:
  *         description: Nombre de usuario o contraseña incorrectos
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *             example: usuario o contraseña incorrectos
  *       500:
  *         description: Error interno al iniciar sesión
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *             examples:
+ *               errorInterno:
+ *                 value: internal server error
+ *               configuracion:
+ *                 value: Error de configuración del servidor
  */
 router.post("/login", login)
 

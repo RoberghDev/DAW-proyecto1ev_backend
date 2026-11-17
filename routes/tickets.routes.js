@@ -21,6 +21,8 @@ const router = express.Router()
  *     tags:
  *       - Tickets
  *     summary: Lista todos los tickets
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de tickets
@@ -51,6 +53,10 @@ const router = express.Router()
  *                     format: date-time
  *       500:
  *         description: No se pudieron obtener los tickets
+ *       401:
+ *         description: Falta un token válido
+ *       403:
+ *         description: El usuario no tiene permisos para consultar todos los tickets
  */
 router.get("/verTodos",
     verificarToken,
@@ -109,6 +115,8 @@ router.post("/crearTicket",
  *     tags:
  *       - Tickets
  *     summary: Elimina un ticket por su ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: idTicket
@@ -127,8 +135,14 @@ router.post("/crearTicket",
  *             example: ticket eliminado con éxito
  *       404:
  *         description: No se encontró el ticket
+ *       400:
+ *         description: El ID del ticket no es válido
  *       500:
  *         description: No se pudo eliminar el ticket
+ *       401:
+ *         description: Falta un token válido
+ *       403:
+ *         description: El usuario no tiene permisos para eliminar tickets
  */
 router.delete("/eliminaUno/:idTicket",
     verificarToken,
