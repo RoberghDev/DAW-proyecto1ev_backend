@@ -4,6 +4,13 @@ const {
     crearNuevoTicket,
     eliminarTikets
 } = require("../controller/tickets.controller")
+const {
+    verificarUsuarioPorId,
+    verificarProductosPorId,
+    verificarTicketsPorId
+} = require("../middleware/verificaciones.middleware")
+const { verificarToken } = require("../middleware/autenticacion.middleware")
+const { verificarRol } = require("../middleware/rol.middleware")
 
 const router = express.Router()
 
@@ -14,6 +21,8 @@ const router = express.Router()
  *     tags:
  *       - Tickets
  *     summary: Lista todos los tickets
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de tickets
@@ -44,8 +53,15 @@ const router = express.Router()
  *                     format: date-time
  *       500:
  *         description: No se pudieron obtener los tickets
+ *       401:
+ *         description: Falta un token válido
+ *       403:
+ *         description: El usuario no tiene permisos para consultar todos los tickets
  */
-router.get("/verTodos", verTodos)
+router.get("/verTodos",
+    verificarToken,
+    verificarRol("ADMIN"),
+    verTodos)
 
 /**
  * @openapi
@@ -87,7 +103,10 @@ router.get("/verTodos", verTodos)
  *       500:
  *         description: No se pudo crear el ticket
  */
-router.post("/crearTicket", crearNuevoTicket)
+router.post("/crearTicket",
+    verificarUsuarioPorId,
+    verificarProductosPorId,
+    crearNuevoTicket)
 
 /**
  * @openapi
@@ -96,6 +115,8 @@ router.post("/crearTicket", crearNuevoTicket)
  *     tags:
  *       - Tickets
  *     summary: Elimina un ticket por su ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: idTicket
@@ -114,9 +135,19 @@ router.post("/crearTicket", crearNuevoTicket)
  *             example: ticket eliminado con éxito
  *       404:
  *         description: No se encontró el ticket
+ *       400:
+ *         description: El ID del ticket no es válido
  *       500:
  *         description: No se pudo eliminar el ticket
+ *       401:
+ *         description: Falta un token válido
+ *       403:
+ *         description: El usuario no tiene permisos para eliminar tickets
  */
-router.delete("/eliminaUno/:idTicket", eliminarTikets)
+router.delete("/eliminaUno/:idTicket",
+    verificarToken,
+    verificarRol("MOD", "ADMIN"),
+    verificarTicketsPorId,
+    eliminarTikets)
 
 module.exports = router

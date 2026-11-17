@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors')
 const productosRouter = require("./routes/productos.routes");
 const ticketsRouter = require("./routes/tickets.routes")
 const usuariosRouter = require("./routes/usuarios.routes")
@@ -7,8 +8,15 @@ require('dotenv').config()
 
 // configuración inicial.
 const app = express();
-const mongoUrl = process.env.MONGODB_URL_LOCAL;
+const mongoUrl = process.env.MONGODB_URL;
 const port = process.env.PORT || 3000;
+
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'http://127.0.0.1:4173'
+    ]
+}));
 
 app.use(express.json());
 app.use("/api/productos", productosRouter);
@@ -21,6 +29,11 @@ const swaggerSpec = require("./config/swagger");
 const logger = require("./config/logger");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
+// TODO: preguntar que es y si es buena idea tenerlo
+// app.get("/api/health", (_req, res) => {
+//     res.status(200).json({ status: "ok" });
+// });
 
 // verificaciones preconexión.
 if (!mongoUrl) {
