@@ -49,6 +49,9 @@ const router = express.Router()
  *                   materiales:
  *                     type: string
  *                     example: Acero inoxidable
+ *                   imagenUrl:
+ *                     type: string
+ *                     example: https://firebasestorage.googleapis.com/v0/b/mi-proyecto.appspot.com/o/relojes%2Fheritage.jpg?alt=media&token=abc123
  *                   createdAt:
  *                     type: string
  *                     format: date-time
@@ -112,6 +115,9 @@ router.get("/verTodos",
  *                 tamañoEsfera:
  *                   type: string
  *                   example: 40mm
+ *                 imagenUrl:
+ *                   type: string
+ *                   example: https://firebasestorage.googleapis.com/v0/b/mi-proyecto.appspot.com/o/relojes%2Fheritage.jpg?alt=media&token=abc123
  *                 createdAt:
  *                   type: string
  *                   format: date-time
@@ -147,6 +153,8 @@ router.get("/:idProducto",
  *             type: object
  *             required:
  *               - precio
+ *               - coleccion
+ *               - tamañoEsfera
  *             properties:
  *               nombreProducto:
  *                 type: string
@@ -173,6 +181,17 @@ router.get("/:idProducto",
  *                 type: string
  *                 default: sin información del tipo de material
  *                 example: Acero inoxidable
+ *               coleccion:
+ *                 type: string
+ *                 enum: [Esqueleto, Heritage, Marine, Noir, Luna, Origine]
+ *                 example: Heritage
+ *               tamañoEsfera:
+ *                 type: string
+ *                 example: 40mm
+ *               imagenUrl:
+ *                 type: string
+ *                 description: URL de descarga de la imagen en Firebase Storage
+ *                 example: https://firebasestorage.googleapis.com/v0/b/mi-proyecto.appspot.com/o/relojes%2Fheritage.jpg?alt=media&token=abc123
  *     responses:
  *       201:
  *         description: Producto creado correctamente

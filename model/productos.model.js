@@ -41,6 +41,11 @@ const productoSchema = new Schema(
         tamañoEsfera: {
             type: String,
             required: true
+        },
+        imagenUrl: { // URL pública de descarga de la foto en Firebase Storage
+            type: String,
+            trim: true,
+            default: ""
         }
 
     }, { timestamps: true }

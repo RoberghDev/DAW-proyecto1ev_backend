@@ -25,7 +25,10 @@ const nuevoProducto = async (req, res) => {
                 cantidad        : req.body.cantidad,
                 descripcion     : req.body.descripcion,
                 tipoMovimiento  : req.body.tipoMovimiento,
-                materiales      : req.body.materiales
+                materiales      : req.body.materiales,
+                coleccion       : req.body.coleccion,
+                tamañoEsfera    : req.body.tamañoEsfera,
+                imagenUrl       : req.body.imagenUrl
             }
         )
 
