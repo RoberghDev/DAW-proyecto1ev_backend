@@ -22,7 +22,10 @@ const nuevoProducto = async (req, res) => {
             {
                 nombreProducto  : req.body.nombreProducto,
                 precio          : req.body.precio,
-                cantidad        : req.body.cantidad
+                cantidad        : req.body.cantidad,
+                descripcion     : req.body.descripcion,
+                tipoMovimiento  : req.body.tipoMovimiento,
+                materiales      : req.body.materiales
             }
         )
 
@@ -56,4 +59,23 @@ const eliminarProducto = async (req, res) => {
     }
 }
 
-module.exports = { listaProductos, nuevoProducto, eliminarProducto }
+// BUSCA EL PRODUCTO POR EL ID
+const buscarPorId = async (req, res) => {
+    try {
+        const resultado = await Productos.findById(req.params.idProducto)
+
+        if(!resultado){
+            logger.error("Producto Controller -> Producto no encontrado")
+            return res.status(404).send("Producto no encontrado")
+        } else {
+            logger.info("Producto Controller -> Producto encontrado con éxito")
+            return res.status(200).send(resultado)
+        }
+
+    } catch (error) {
+        logger.error(`Producto Controller -> Error al buscar el producto: ${error}`);
+		res.status(500).json({ error: "No se pudo buscar el producto." });
+    }
+}
+
+module.exports = { listaProductos, nuevoProducto, eliminarProducto, buscarPorId }

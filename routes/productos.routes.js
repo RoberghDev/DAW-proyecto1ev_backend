@@ -2,7 +2,8 @@ const express = require("express")
 const {
     listaProductos,
     nuevoProducto,
-    eliminarProducto
+    eliminarProducto,
+    buscarPorId
 } = require("../controller/productos.controller")
 const { verificarProductosPorId, verificarUsuarioPorId } = require("../middleware/verificaciones.middleware")
 const { verificarRol } = require("../middleware/rol.middleware")
@@ -39,6 +40,15 @@ const router = express.Router()
  *                   cantidad:
  *                     type: integer
  *                     example: 12
+ *                   descripcion:
+ *                     type: string
+ *                     example: Reloj automático de acero
+ *                   tipoMovimiento:
+ *                     type: string
+ *                     example: Automático
+ *                   materiales:
+ *                     type: string
+ *                     example: Acero inoxidable
  *                   createdAt:
  *                     type: string
  *                     format: date-time
@@ -50,6 +60,75 @@ const router = express.Router()
  */
 router.get("/verTodos",
     listaProductos)
+
+/**
+ * @openapi
+ * /api/productos/{idProducto}:
+ *   get:
+ *     tags:
+ *       - Productos
+ *     summary: Obtiene un producto por su ID
+ *     parameters:
+ *       - in: path
+ *         name: idProducto
+ *         required: true
+ *         description: ID de MongoDB del producto
+ *         schema:
+ *           type: string
+ *         example: 665f1a2b3c4d5e6f7890abcd
+ *     responses:
+ *       200:
+ *         description: Producto encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: 665f1a2b3c4d5e6f7890abcd
+ *                 nombreProducto:
+ *                   type: string
+ *                   example: Reloj automático de acero
+ *                 precio:
+ *                   type: number
+ *                   example: 249.99
+ *                 cantidad:
+ *                   type: integer
+ *                   example: 12
+ *                 descripcion:
+ *                   type: string
+ *                   example: Reloj automático de acero
+ *                 tipoMovimiento:
+ *                   type: string
+ *                   example: Automático
+ *                 materiales:
+ *                   type: string
+ *                   example: Acero inoxidable
+ *                 coleccion:
+ *                   type: string
+ *                   enum: [Esqueleto, Heritage, Marine, Noir, Luna, Origine]
+ *                   example: Heritage
+ *                 tamañoEsfera:
+ *                   type: string
+ *                   example: 40mm
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: El ID del producto no es válido
+ *       404:
+ *         description: Producto no encontrado
+ *       500:
+ *         description: No se pudo buscar el producto
+ */
+router.get("/:idProducto",
+    verificarProductosPorId,
+    buscarPorId
+)
 
 /**
  * @openapi
@@ -82,6 +161,18 @@ router.get("/verTodos",
  *                 minimum: 0
  *                 default: 0
  *                 example: 12
+ *               descripcion:
+ *                 type: string
+ *                 default: sin descripción
+ *                 example: Reloj automático de acero
+ *               tipoMovimiento:
+ *                 type: string
+ *                 default: sin información del movimiento
+ *                 example: Automático
+ *               materiales:
+ *                 type: string
+ *                 default: sin información del tipo de material
+ *                 example: Acero inoxidable
  *     responses:
  *       201:
  *         description: Producto creado correctamente

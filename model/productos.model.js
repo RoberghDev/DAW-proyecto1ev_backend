@@ -17,7 +17,32 @@ const productoSchema = new Schema(
             required: true,
             default: 0,
             min: 0
+        },
+        descripcion: {
+            type: String,
+            required: true,
+            default: "sin descripción"
+        }, 
+        tipoMovimiento: {
+            type: String,
+            required: true,
+            default: "sin información del movimiento"
+        }, 
+        materiales: {
+            type: String,
+            required: true,
+            default: "sin información del tipo de material"
+        },
+        coleccion: {
+            type: String,
+            required: true,
+            enum: ["Esqueleto", "Heritage", "Marine", "Noir", "Luna", "Origine"]
+        },
+        tamañoEsfera: {
+            type: String,
+            required: true
         }
+
     }, { timestamps: true }
 )
 

@@ -67,7 +67,8 @@ const login = async (req, res) => {
         logger.info("Usuarios Controller -> Inicio de sesión correcto");
         return res.status(200).json({
             mensaje: "login correcto",
-            token: token
+            token: token,
+            username: usuario.nombreUsuario
         })
 
     } catch (error) {
