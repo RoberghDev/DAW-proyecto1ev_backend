@@ -1,8 +1,10 @@
 const express = require("express")
 const {
     verTodos,
+    verMisTickets,
     crearNuevoTicket,
-    eliminarTikets
+    eliminarTikets,
+    editarTicket
 } = require("../controller/tickets.controller")
 const {
     verificarUsuarioPorId,
@@ -60,8 +62,33 @@ const router = express.Router()
  */
 router.get("/verTodos",
     verificarToken,
-    verificarRol("ADMIN"),
+    verificarRol("MOD", "ADMIN"),
     verTodos)
+
+/**
+ * @openapi
+ * /api/tickets/misTickets:
+ *   get:
+ *     tags:
+ *       - Tickets
+ *     summary: Lista los tickets del usuario que ha iniciado sesión
+ *     description: El usuario se obtiene del token, no de la petición.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de tickets del usuario (vacía si no tiene ninguno)
+ *       401:
+ *         description: Falta un token válido
+ *       403:
+ *         description: Solo los usuarios con rol USER tienen tickets propios
+ *       500:
+ *         description: No se pudieron obtener los tickets
+ */
+router.get("/misTickets",
+    verificarToken,
+    verificarRol("USER"),
+    verMisTickets)
 
 /**
  * @openapi
@@ -70,6 +97,8 @@ router.get("/verTodos",
  *     tags:
  *       - Tickets
  *     summary: Crea un ticket de incidencia
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -102,8 +131,14 @@ router.get("/verTodos",
  *             example: nuevo ticket creado
  *       500:
  *         description: No se pudo crear el ticket
+ *       401:
+ *         description: Falta un token válido
+ *       403:
+ *         description: Solo los usuarios con rol USER pueden crear tickets
  */
 router.post("/crearTicket",
+    verificarToken,
+    verificarRol("USER"),
     verificarUsuarioPorId,
     verificarProductosPorId,
     crearNuevoTicket)
@@ -149,5 +184,97 @@ router.delete("/eliminaUno/:idTicket",
     verificarRol("MOD", "ADMIN"),
     verificarTicketsPorId,
     eliminarTikets)
+
+/**
+ * @openapi
+ * /api/tickets/editarUno/{idTicket}:
+ *   patch:
+ *     tags:
+ *       - Tickets
+ *     summary: Edita el estado de un ticket y/o se lo asigna a quien hace la petición
+ *     description: Se puede enviar estado, asignarme o ambos. Con asignarme a true se guarda en idModAsignado el id del token (nunca uno enviado en el body). Cualquier otro campo se ignora.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: idTicket
+ *         required: true
+ *         description: ID de MongoDB del ticket
+ *         schema:
+ *           type: string
+ *         example: 665f1a2b3c4d5e6f7890abcd
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               estado:
+ *                 type: string
+ *                 enum: [abierto, en curso, resuelto, cerrado]
+ *                 example: en curso
+ *               asignarme:
+ *                 type: boolean
+ *                 description: true para asignarse el ticket a uno mismo
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Estado del ticket actualizado. Devuelve el ticket actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: 665f1a2b3c4d5e6f7890abcd
+ *                 idUsuario:
+ *                   type: string
+ *                   description: ID de MongoDB del usuario
+ *                 idProducto:
+ *                   type: string
+ *                   description: ID de MongoDB del producto
+ *                 idModAsignado:
+ *                   type: string
+ *                   description: ID de MongoDB del moderador asignado
+ *                 incidencia:
+ *                   type: string
+ *                   example: El reloj se retrasa varios minutos al día
+ *                 estado:
+ *                   type: string
+ *                   enum: [abierto, en curso, resuelto, cerrado]
+ *                   example: en curso
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: No se ha indicado ningún cambio, el estado no es válido o el ID del ticket no es válido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: El estado indicado no es válido
+ *       401:
+ *         description: Falta un token válido
+ *       403:
+ *         description: El usuario no tiene permisos para editar tickets
+ *       404:
+ *         description: No se encontró el ticket
+ *       500:
+ *         description: No se pudo editar el ticket
+ */
+router.patch("/editarUno/:idTicket",
+    verificarToken,
+    verificarRol("MOD", "ADMIN"),
+    verificarTicketsPorId,
+    editarTicket
+)
 
 module.exports = router

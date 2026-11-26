@@ -12,12 +12,11 @@ const ticketSchema = new Schema(
             ref: "Producto",
             required: true
         },
-        // TODO: cambiar cuando determinemos los roles
-        // idAgenteAsignado:{
-        //     type: Schema.Types.ObjectId,
-        //     ref: "Usuario",
-        //     required: true
-        // },
+        idModAsignado:{
+            type: Schema.Types.ObjectId,
+            ref: "Usuario",
+            default: null
+        },
         incidencia: {
             type: String,
             required: true
@@ -26,10 +25,9 @@ const ticketSchema = new Schema(
             type: String,
             required: true,
             trim: true,
-            enum: [ // TODO: determinar si puede ser visto por el usuario
+            enum: [
                 "abierto", 
                 "en curso", 
-                "pendiente del cliente",
                 "resuelto",
                 "cerrado"
             ],
