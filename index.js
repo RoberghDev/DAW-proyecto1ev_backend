@@ -14,7 +14,8 @@ const port = process.env.PORT || 3000;
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        'http://127.0.0.1:4173'
+        'http://127.0.0.1:4173',
+        'https://daw-proyecto1ev-backend.onrender.com/api',
     ]
 }));
 
